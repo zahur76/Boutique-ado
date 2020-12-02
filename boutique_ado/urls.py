@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     # Shows path were to obtain urls from instead of writing them here
+    # Will include additional path included in root url. Need only once per app
     path('', include('home.urls')),
     path('products/', include('products.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
