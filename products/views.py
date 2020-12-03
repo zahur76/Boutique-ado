@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-# Import models database to use in search 
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.contrib import messages
+from django.db.models import Q
+# Import models database to use in search
 from .models import Product
 
 
@@ -7,9 +9,22 @@ from .models import Product
 def all_products(request):
     """ A view to return all products and product search """
     products = Product.objects.all()
+    query = None
+
+    if request.GET:
+        if 'q' in request.GET:
+            query = request.GET['q']
+            # Query is blank
+            if not query:
+                messages.error(request, "You didn't enter any search criteria!")
+                return redirect(reverse('products'))
+            else:
+                queries = Q(name__icontains=query) | Q(description__icontains=query)
+                products = products.filter(queries)
 
     context = {
         'products': products,
+        'search_term': query,
     }
     return render(request, 'products/products.html', context)
 
