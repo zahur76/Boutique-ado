@@ -20,6 +20,7 @@ class Product(models.Model):
     # null=True will set empty values in the database
     # blank=True, value is not required
     # Adds category to product model and allows query of category from product model
+    # id field automatically assigned
     category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
     sku = models.CharField(max_length=254, null=True, blank=True)
     name = models.CharField(max_length=254)

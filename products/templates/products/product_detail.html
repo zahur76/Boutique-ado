@@ -43,6 +43,7 @@
                         <small class="text-muted">No Rating</small>
                     {% endif %}
                     <p class="mt-3">{{ product.description }}</p>
+                    <!-- product.id same as product.pk. Automatically assigned-->
                     <form class="form" action="{% url 'add_to_bag' product.id %}" method="POST">
                         {% csrf_token %}
                         <div class="form-row">
@@ -54,7 +55,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-12">
                                 <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 mt-5">
                                     <span class="icon">
@@ -64,6 +64,7 @@
                                 </a>
                                 <input type="submit" class="btn btn-black rounded-0 text-uppercase mt-5" value="Add to Bag">
                             </div>
+                            <!-- Request.path is the current url -->
                             <input type="hidden" name="redirect_url" value="{{ request.path }}">
                         </div>
                     </form>
