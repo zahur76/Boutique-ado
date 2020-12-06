@@ -27,17 +27,22 @@ def add_to_bag(request, item_id):
             size = request.POST['product_size']
             # bag = {'1': 2, '2': 1, '3':{"item_by_size": {'m':1, 'l':2} }}
             # print(bag)
-            # print(bag['3']['item_by_size'].keys())
-            # if 'xl' in bag['3']['item_by_size'].keys():
-            # bag['3']['item_by_size']['m']+=1
+            # size= 'xl'
+            # item_id = '4'
+            # if item_id in bag.keys():
+            # if size in bag[item_id]['item_by_size'].keys():
+            #     bag[item_id]['item_by_size'][size] += 1
             # else:
-            # bag['3']['item_by_size']['xl'] = 1
+            #     bag[item_id]['item_by_size'][size] = 1
+            # else:
+            # bag[item_id] = {'item_by_size': {size: 1}}
             # print(bag)
+  
             if item_id in bag.keys():
-                # item already exists but size already present
+                # item already exists and size already present
                 if size in bag[item_id]['items_by_size'].keys():
                     bag[item_id]['items_by_size'][size] += quantity
-                # item already exists but slected size not present, it will create field
+                # item already exists but selected size not present, it will create field
                 else:
                     bag[item_id]['items_by_size'][size] = quantity
             else:
@@ -59,5 +64,5 @@ def add_to_bag(request, item_id):
 
         # This will overwrite session with new dictionary/ must be in reverse
         request.session['bag'] = bag
-
+        print(bag)
         return redirect(redirect_url)
