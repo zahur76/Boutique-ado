@@ -7,7 +7,8 @@ from django.shortcuts import get_object_or_404
 
 
 def bag_contents(request):
-
+    product = 0
+    quantity = 0
     bag_items = []
     total = 0
     product_count = 0
@@ -48,8 +49,11 @@ def bag_contents(request):
     else:
         delivery = 0
         free_delivery_delta = 0
-    
-    sub_total = quantity*product.price
+
+    if len(bag) > 0:
+        sub_total = quantity*product.price
+    else:
+        sub_total = 0
     grand_total = delivery + total
 
     context = {
