@@ -152,12 +152,8 @@
         console.log(size)
         var url = `/bag/remove/${itemId}/`;
         var data = {'csrfmiddlewaretoken': csrfToken, 'product_size': size};
-        if ('product_size == ""'){
-            var data = {'csrfmiddlewaretoken': csrfToken};
-        }
-        else{
-            var data = {'csrfmiddlewaretoken': csrfToken, 'product_size': size};
-        }
+        
+        
         console.log(data)
         $.post(url, data)
          .done(function() {
