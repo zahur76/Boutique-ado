@@ -49,11 +49,6 @@ def bag_contents(request):
     else:
         delivery = 0
         free_delivery_delta = 0
-
-    if len(bag) > 0:
-        sub_total = quantity*product.price
-    else:
-        sub_total = 0
     grand_total = delivery + total
 
     context = {
