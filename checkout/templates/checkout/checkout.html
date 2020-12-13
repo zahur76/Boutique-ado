@@ -13,7 +13,7 @@
     </div>
 {% endblock %}
 
-{% block content %}
+{% block content %}    
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
@@ -39,6 +39,7 @@
                     <div class="row">
                         <div class="col-2 mb-1">
                             <a href="{% url 'product_detail' item.product.id %}">
+                                <!-- Item/product/image -->
                                 {% if item.product.image %}
                                     <img class="w-100" src="{{ item.product.image.url }}" alt="{{ product.name }}">
                                 {% else %}
@@ -136,6 +137,8 @@
 {% endblock %}
 
 {% block postloadjs %}
+    <!-- Super block prevents previous content from base.html being erased -->
+    <!-- Prevents the parent template content from being erased -->
     {{ block.super }}
     {{ stripe_public_key|json_script:"id_stripe_public_key" }}
     {{ client_secret|json_script:"id_client_secret" }}

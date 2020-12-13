@@ -134,6 +134,8 @@
 
 <!-- Comes from base.html -->
 {% block postloadjs %}
+<!-- Super block prevents previous content from base.html being erased -->
+<!-- hence prevents the parents template content from being erased -->
 {{ block.super }}
 {% include 'products/includes/quantity_input_script.html' %}
 
