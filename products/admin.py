@@ -4,6 +4,7 @@ from .models import Product, Category
 # Register your models here.
 
 class ProductAdmin(admin.ModelAdmin):
+    # what to be displayed in admin
     list_display = (
         'sku',
         'name',
@@ -12,7 +13,7 @@ class ProductAdmin(admin.ModelAdmin):
         'rating',
         'image',
     )
-
+    # How we wish to order in admin
     ordering = ('sku',)
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -21,5 +22,6 @@ class CategoryAdmin(admin.ModelAdmin):
         'name',
     )
 
+# The model followed by class name (model, class name)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)

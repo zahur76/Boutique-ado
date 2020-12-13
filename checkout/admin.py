@@ -3,11 +3,13 @@ from .models import Order, OrderLineItem
 
 
 class OrderLineItemAdminInline(admin.TabularInline):
+    # no inline since using in orderadmin
     model = OrderLineItem
     readonly_fields = ('lineitem_total',)
 
 
 class OrderAdmin(admin.ModelAdmin):
+    # Allows us to edit line items inside order model https://docs.djangoproject.com/en/3.1/ref/contrib/admin/#inlinemodeladmin-objects
     inlines = (OrderLineItemAdminInline,)
 
     readonly_fields = ('order_number', 'date',
