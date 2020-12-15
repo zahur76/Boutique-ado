@@ -43,6 +43,8 @@ def all_products(request):
 
         if 'category' in request.GET:
             # Returns a list
+            # categories = list(request.GET['category'].split(','))
+            # Convert into list to compare below
             categories = request.GET['category'].split(',')
             # __name__: Looking for name field in category model since related by foreign key
             # category is present in products field but with number reference, this method allows us to use the actual name
@@ -64,7 +66,7 @@ def all_products(request):
 
     current_sorting = f'{sort}_{direction}'
 
-    context = {
+    context = {        
         'products': products,
         'search_term': query,
         'current_categories': categories,

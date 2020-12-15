@@ -9,7 +9,11 @@
     </div>
 {% endblock %}
 
-{% block content %}    
+{% block content %}     
+    <!-- Obtaining all products in category C
+    {% for c in current_categories %} 
+    {{ c.prod.all }}
+    {% endfor %} -->    
     <div class="overlay"></div>    
     <div class="container-fluid">
         <div class="row">
@@ -50,7 +54,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="row">                                     
+                <div class="row">                                                       
                     {% for product in products %}                                                                                                          
                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                             <div class="card h-100 border-0">
@@ -74,6 +78,7 @@
                                         <div class="col">
                                             <p class="lead mb-0 text-left font-weight-bold">${{ product.price }}</p>
                                             <!-- Come from models having foreignkey as category -->
+                                            <!-- Will get the related category object/ Queries the product then obtains the corresponding category -->
                                             {% if product.category %}
                                             <p class="small mt-1 mb-0">
                                                 <a class="text-muted" href="{% url 'products' %}?category={{ product.category.name }}">

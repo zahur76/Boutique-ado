@@ -16,8 +16,9 @@ def checkout(request):
 
     # To obtain information from form to send to model
     if request.method == 'POST':
+
         bag = request.session.get('bag', {})
-        # Get all info from form
+        # Get all info from form/This is the Order Model
         form_data = {
             'full_name': request.POST['full_name'],
             'email': request.POST['email'],
@@ -29,18 +30,20 @@ def checkout(request):
             'street_address2': request.POST['street_address2'],
             'county': request.POST['county'],
         }
-        # Make instance of form with filled in data
+        # Make instance of form with filled with form data
         order_form = OrderForm(form_data)
         if order_form.is_valid():
             # save form to model Order
+            # This method creates and saves a database object from the data bound to the form, ie Order
             order = order_form.save()
+
             # Save items from bag to OrderLineItem model
             # Requires bag
             for item_id, item_data in bag.items():
                 try:
                     product = Product.objects.get(id=item_id)
                     if isinstance(item_data, int):
-                        # Save info to OrderLineItem
+                        # Save info to OrderLineItem/ This requires Order plus other fields as per model
                         order_line_item = OrderLineItem(
                             order=order,
                             product=product,
@@ -70,7 +73,7 @@ def checkout(request):
         else:
             messages.error(request, 'There was an error with your form. \
                 Please double check your information.')
-    # Get request with no items been posted
+    # Get request when havent submitted form yet
     else:
         # If no items in bag
         bag = request.session.get('bag', {})
@@ -87,7 +90,7 @@ def checkout(request):
             amount=stripe_total,
             currency=settings.STRIPE_CURRENCY,
         )
-        # Make instance of order form to be used in checkout
+        # Make instance of order form to be used in checkout.html
         order_form = OrderForm()
 
     if not stripe_public_key:

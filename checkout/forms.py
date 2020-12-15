@@ -5,7 +5,8 @@ from .models import Order
 class OrderForm(forms.ModelForm):
     class Meta:
         # Order comes from model forms since form is based on Order model
-        # Filling form will updtae Order model
+        # Filling form will update Order model when saved
+
         model = Order
         fields = ('full_name', 'email', 'phone_number',
                   'street_address1', 'street_address2',
