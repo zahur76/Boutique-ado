@@ -22,6 +22,8 @@ class Product(models.Model):
     # blank=True, value is not required
     # Adds category to product model and allows query of category from product model
     # id field automatically assigned
+    # Product can only have 1 category so place foreign key here
+    # If request for product: product.category. If reverse then category.product.all()
     category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL) # related_name ='prod'
     sku = models.CharField(max_length=254, null=True, blank=True)
     name = models.CharField(max_length=254)

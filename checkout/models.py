@@ -4,10 +4,7 @@ from django.db import models
 from django.db.models import Sum
 from django.conf import settings
 
-
-
 from products.models import Product
-
 
 
 class Order(models.Model):
@@ -31,10 +28,14 @@ class Order(models.Model):
         Update grand total each time a line item is added,
         accounting for delivery costs.
         """
+        # Requesting lineitems: Order.lineitems.all() since backwards relationship/foreign key in lineitems
         # https://docs.djangoproject.com/en/3.1/topics/db/aggregation/#following-relationships-backwards
         # Obtain all lineitems related to that order using foriegn key/ all() not needed when using aggregate
         b = self.lineitems.all().aggregate(Sum('lineitem_total'))
+        c = self.lineitems.all()
         print(b)
+        for item in c:
+            print(item.product)
         # This returns a dictionary
         # {'lineitem_total__sum': Decimal('76.9900000000000')}
         # Therefore need to add ['lineitem_total__sum'] to obtain value
@@ -64,12 +65,13 @@ class Order(models.Model):
 
 # https://docs.djangoproject.com/en/3.1/topics/db/queries/ lookups
 class OrderLineItem(models.Model):
+    # orderlineitem can have only 1 order, so put foreignkey here
     order = models.ForeignKey(Order, null=False, blank=False, on_delete=models.CASCADE, related_name='lineitems')
     product = models.ForeignKey(Product, null=False, blank=False, on_delete=models.CASCADE)
     product_size = models.CharField(max_length=2, null=True, blank=True) # XS, S, M, L, XL
     quantity = models.IntegerField(null=False, blank=False, default=0)
     lineitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, editable=False)
-
+    
     # Everytime the save method is called on OrderlinbeItem this function will execute
     def save(self, *args, **kwargs):
         """
