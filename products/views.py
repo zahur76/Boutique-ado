@@ -51,7 +51,12 @@ def all_products(request):
             # instead of number by referencing the category model using foreign key in models.
             # using filter since object already queried
             # category_name obtained from foreignkey defined in Product model/lookups that span relationships
+            # Obtaining query set for html(category__name: double undrscore since refering to foeignkey)
+            # https://docs.djangoproject.com/en/3.1/topics/db/queries/#lookups-that-span-relationships
+            # The __in refers to list. Returns all products with categories in category list as queryset
+            # https://docs.djangoproject.com/en/3.1/topics/db/queries/#the-pk-lookup-shortcut
             products = products.filter(category__name__in=categories)
+            # Get all categories where name in catgories list as a queryset
             categories = Category.objects.filter(name__in=categories)
 
         if 'q' in request.GET:
