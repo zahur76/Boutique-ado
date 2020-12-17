@@ -12,6 +12,7 @@ import stripe
 @csrf_exempt
 def webhook(request):
     """Listen for webhooks from Stripe"""
+    # Listen to messages from strip
     # Will return a event
     # Setup
     wh_secret = settings.STRIPE_WH_SECRET
@@ -51,7 +52,8 @@ def webhook(request):
         'payment_intent.payment_failed': handler.handle_payment_intent_payment_failed,
     }
     # Get the webhook type from Stripe
-    # Event returns a dictionary
+    print(event['type'])
+    # event returns a dictionary
     # {
     # "created": 1326853478,
     # "livemode": false,
@@ -66,5 +68,6 @@ def webhook(request):
     else:
         event_handler = handler.handle_event
     # Call the event handler with the event from webhook handler
+    # same as : handler.handle_payment_intent_payment_failed(event), will trigger webhook handler
     response = event_handler(event)
     return response

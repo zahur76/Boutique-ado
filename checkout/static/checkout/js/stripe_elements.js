@@ -7,6 +7,9 @@
 
 var stripePublicKey = $('#id_stripe_public_key').text().slice(1, -1);
 var clientSecret = $('#id_client_secret').text().slice(1, -1);
+console.log(clientSecret)
+var zahursecret = $('#zahur').val()
+console.log(zahursecret)
 var stripe = Stripe(stripePublicKey);
 var elements = stripe.elements();
 var style = {
@@ -45,15 +48,17 @@ card.addEventListener('change', function (event) {
 
 // Handle form submit
 var form = document.getElementById('payment-form');
-
+// When we press submit
 form.addEventListener('submit', function(ev) {
-    /* Prevents submit button from working  */
+    /* Prevents form from being submitted to view and instead runs the following function */
     ev.preventDefault();
-    card.update({ 'disabled': true});
+    /* Disable submit button and card update to prevent multiple submissions */
+    card.update({ 'disabled': true});    
     $('#submit-button').attr('disabled', true);
     $('#payment-form').fadeToggle(100);
     $('#loading-overlay').fadeToggle(100);
 
+    // Have to use data url since cannot update checked data in payment method below
     var saveInfo = Boolean($('#id-save-info').attr('checked'));
     // From using {% csrf_token %} in the form
     var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
@@ -63,10 +68,11 @@ form.addEventListener('submit', function(ev) {
         'save_info': saveInfo,
     };
     var url = '/checkout/cache_checkout_data/';
-
+    // This function will run instead of form submission hence no form submitted to view and model yet!
     $.post(url, postData).done(function () {
         stripe.confirmCardPayment(clientSecret, {
             payment_method: {
+                // Checks  card and add details from form 
                 card: card,
                 billing_details: {
                     name: $.trim(form.full_name.value),
@@ -108,6 +114,7 @@ form.addEventListener('submit', function(ev) {
                 $('#submit-button').attr('disabled', false);
             } else {
                 if (result.paymentIntent.status === 'succeeded') {
+                    // Form will only be submitted to view now and model updated
                     form.submit();
                 }
             }
