@@ -11,6 +11,7 @@ class UserProfile(models.Model):
     A user profile model for maintaining default
     delivery information and order history
     """
+    # Foreign key placed in Order to obtain orders for that user: user.Userprofile.Order.all()
     # onetoonefield same as foreign key but only one userprofile can have one user
     # https://docs.djangoproject.com/en/3.1/ref/models/fields/#onetoonefield
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -34,6 +35,7 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     Create or update the user profile
     """
     if created:
+        # means you have created a new person
         UserProfile.objects.create(user=instance)
     # Existing users: just save the profile
     instance.userprofile.save()
