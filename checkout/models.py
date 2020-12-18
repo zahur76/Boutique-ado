@@ -7,7 +7,7 @@ from django.conf import settings
 from django_countries.fields import CountryField
 
 from products.models import Product
-# Used since connected to Userprofile model
+# Required since connected to Userprofile model
 from profiles.models import UserProfile
 
 

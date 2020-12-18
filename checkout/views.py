@@ -63,7 +63,8 @@ def checkout(request):
             order = order_form.save(commit=False)
             # same as intent.id/included in form
             pid = request.POST.get('client_secret').split('_secret')[0]
-            # We are saving to the order Object model created above
+            # We are saving to the order Object model created above fields which are not present in form and are present in model
+            # The Object belonging to the Order model is called order
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
             order.save()
