@@ -59,11 +59,11 @@ def checkout(request):
             # This method creates and saves a database object from the data bound to the form, ie Order
             # small letter order represents the Order model
             # Commit=False prevents saving since still have addional fields to enter into model not present in form
-            # We are saving to the attached model
+            # We are saving to the attached Object model
             order = order_form.save(commit=False)
             # same as intent.id/included in form
             pid = request.POST.get('client_secret').split('_secret')[0]
-            # We are saving to the order model created above
+            # We are saving to the order Object model created above
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
             order.save()
@@ -97,12 +97,12 @@ def checkout(request):
                     return redirect(reverse('view_bag'))
 
             request.session['save_info'] = 'save-info' in request.POST
-            # Order has been saved above and repesents the Order model            
+            # Order has been saved above and repesents the Order model
             return redirect(reverse('checkout_success', args=[order.order_number]))
         else:
             messages.error(request, 'There was an error with your form. \
                 Please double check your information.')
-    # Get request when havent submitted form yet and checkout loads
+    # Get request when havent submitted form yet and checkout page loads
     else:
         # If no items in bag
         bag = request.session.get('bag', {})
@@ -116,9 +116,10 @@ def checkout(request):
             # This is get request and will make a payment intent to stripe when page loads
             total = current_bag['grand_total']
             stripe_total = round(total * 100)
-            # Required to make request for intent.client_secret
+            # Required to make request for intent.client_secret/Payment intent
             stripe.api_key = stripe_secret_key
             # Create intent/Returns a dictionary
+            # https://stripe.com/docs/payments/payment-intents#creating-a-paymentintent
             intent = stripe.PaymentIntent.create(
                 amount=stripe_total,
                 currency=settings.STRIPE_CURRENCY,
@@ -141,7 +142,7 @@ def checkout(request):
         'stripe_public_key': stripe_public_key,
         # Created by stripe when intent is made/ When we go to checkout page
         'client_secret': intent.client_secret,
-    }    
+    }
     return render(request, template, context)
 
 
