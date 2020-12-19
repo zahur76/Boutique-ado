@@ -2,6 +2,7 @@ from django.http import HttpResponse
 
 from .models import Order, OrderLineItem
 from products.models import Product
+from profiles.models import UserProfile
 
 import json
 import time
@@ -29,8 +30,9 @@ class StripeWH_Handler:
         pid = intent.id
         bag = intent.metadata.bag
         save_info = intent.metadata.save_info
-
+        # This comes from intent.charges succeded
         billing_details = intent.charges.data[0].billing_details
+        # This gets the shipping data from intent dictionary
         shipping_details = intent.shipping
         grand_total = round(intent.charges.data[0].amount / 100, 2)
 
@@ -38,6 +40,22 @@ class StripeWH_Handler:
         for field, value in shipping_details.address.items():
             if value == "":
                 shipping_details.address[field] = None
+
+        # Update profile information if save_info was checked
+        profile = None
+        username = intent.metadata.username
+        if username != 'AnonymousUser':
+            profile = UserProfile.objects.get(user__username=username)
+            # This was sent to webhook to be saved via metadata
+            if save_info:
+                profile.default_phone_number = shipping_details.phone
+                profile.default_country = shipping_details.address.country
+                profile.default_postcode = shipping_details.address.postal_code
+                profile.default_town_or_city = shipping_details.address.city
+                profile.default_street_address1 = shipping_details.address.line1
+                profile.default_street_address2 = shipping_details.address.line2
+                profile.default_county = shipping_details.address.state
+                profile.save()
 
         # Method3
         attempt = 1
@@ -60,10 +78,12 @@ class StripeWH_Handler:
             # This implies sumbit button has not been activated
         else:
             print('Order not in model')
+            order = None
             try:
                 # Need to create Object since not using form
                 order = Order.objects.create(
-                    full_name=shipping_details.name,
+                    full_name=shipping_details.name,                    
+                    user_profile=profile,
                     # Present in billing address only/Needed for search in model
                     email=billing_details.email,
                     phone_number=shipping_details.phone,
