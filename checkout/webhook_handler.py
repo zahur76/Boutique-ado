@@ -47,6 +47,7 @@ class StripeWH_Handler:
                 order = Order.objects.get(stripe_pid=pid)
                 order = True
                 break
+            # Remember when using except must use Model name Order and not order
             except Order.DoesNotExist:
                 order = False
                 attempt += 1
