@@ -10,3 +10,5 @@ $('#id_default_country').change(function() {
         $(this).css('color', '#000');
     }
 });
+
+ 

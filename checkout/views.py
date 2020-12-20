@@ -21,9 +21,7 @@ def cache_checkout_data(request):
         pid = request.POST.get('client_secret').split('_secret')[0]
         stripe.api_key = settings.STRIPE_SECRET_KEY
         stripe.PaymentIntent.modify(pid, metadata={
-            'bag': json.dumps(request.session.get('bag', {})),
             'save_info': request.POST.get('save_info'),
-            'username': request.user,
         })
         return HttpResponse(status=200)
     except Exception as e:
@@ -128,6 +126,10 @@ def checkout(request):
             intent = stripe.PaymentIntent.create(
                 amount=stripe_total,
                 currency=settings.STRIPE_CURRENCY,
+                metadata={
+                    'bag': json.dumps(request.session.get('bag', {})),
+                    'username': request.user,
+                },
             )
             # intent.client_secret: pi_1HzFW6L9RkpyhrRPmehv8jxK_secret_FThAHTXI6pCMZqusFdMiNf7Zy
             # Make instance of order form to be used in checkout.html
@@ -136,9 +138,11 @@ def checkout(request):
             # Creates Order model from form/Prefill form if user profile exists
             if request.user.is_authenticated:
                 try:
-                    profile = UserProfile.objects.get(user=request.user)
+                    # Obtain user profile if exists
+                    profile = UserProfile.objects.get(user__username=request.user)
+                    # making prepopulating order form using profile information
                     order_form = OrderForm(initial={
-                        'full_name': profile.user.get_full_name(),
+                        'full_name': profile.user.first_name + " " + profile.user.last_name,
                         'email': profile.user.email,
                         'phone_number': profile.default_phone_number,
                         'country': profile.default_country,
@@ -152,9 +156,9 @@ def checkout(request):
                     order_form = OrderForm()
             else:
                 order_form = OrderForm()
-            
 
-    # Public key sent to template to used by JS
+
+    # Public key sent to template to be used by JS
     if not stripe_public_key:
         messages.warning(request, 'Stripe public key is missing. \
             Did you forget to set it in your environment?')
@@ -183,8 +187,9 @@ def checkout_success(request, order_number):
     # https://docs.djangoproject.com/en/3.1/topics/auth/default/#authentication-in-web-requests
     # Checks to see if user is logged in
     if request.user.is_authenticated:
-        # Will obtain Userprofile for current user
-        profile = UserProfile.objects.get(user=request.user)
+        # Will obtain Userprofile from current user using foreignkey/onetoone
+        # https://docs.djangoproject.com/en/3.1/topics/db/examples/one_to_one/#one-to-one-relationships
+        profile = UserProfile.objects.get(user__username=request.user)
         # Attach the user's profile to the order
         # https://docs.djangoproject.com/en/3.1/ref/models/instances/#updating-attributes-based-on-existing-fields
         # Save the user_profile field in Order model requested above

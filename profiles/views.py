@@ -8,18 +8,18 @@ from checkout.models import Order
 
 def profile(request):
     """ Display the user's profile. """
-    profile = get_object_or_404(UserProfile, user=request.user)
+    profile = get_object_or_404(UserProfile, user__username=request.user)
 
     if request.method == 'POST':
-        # populate it with profile info above
+        # Create instance of form using form data on submission form page to update the profile instance called above
         form = UserProfileForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully')
-
+    # prepopulate form with profile information above if exists
     form = UserProfileForm(instance=profile)
-    # Get all orders for that profile user using foreignkey
-    # Foreignkey located within profile, hence backwards relationship
+    # Get all orders for that profile user using foreignkey/related name
+    # Foreignkey located within order, hence backwards relationship
     orders = profile.orders.all()
 
     template = 'profiles/profile.html'

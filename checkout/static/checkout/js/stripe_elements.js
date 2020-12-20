@@ -70,10 +70,15 @@ form.addEventListener('submit', function(ev) {
     var url = '/checkout/cache_checkout_data/';
     // This function will run instead of form submission hence no form submitted to view and model yet!
     $.post(url, postData).done(function () {
+        // https://stripe.com/docs/js/payment_intents/confirm_card_payment#stripe_confirm_card_payment-clientSecret
         stripe.confirmCardPayment(clientSecret, {
+            // This is the data part
+            // 1. Payment method
             payment_method: {
                 // Checks  card and add details from form 
                 card: card,
+                // https://stripe.com/docs/api/payment_methods/create#create_payment_method-billing_details
+                // email is accepted in billing and not in shipping
                 billing_details: {
                     name: $.trim(form.full_name.value),
                     phone: $.trim(form.phone_number.value),
@@ -87,9 +92,11 @@ form.addEventListener('submit', function(ev) {
                     }
                 }
             },
+            // https://stripe.com/docs/api/payment_intents/confirm#confirm_payment_intent-shipping
+            // 2. 2nd part of data Shipping(optional)
             shipping: {
                 name: $.trim(form.full_name.value),
-                phone: $.trim(form.phone_number.value),
+                phone: $.trim(form.phone_number.value),                
                 address: {
                     line1: $.trim(form.street_address1.value),
                     line2: $.trim(form.street_address2.value),

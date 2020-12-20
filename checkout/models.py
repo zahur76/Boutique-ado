@@ -31,6 +31,7 @@ class Order(models.Model):
     original_bag = models.TextField(null=False, blank=False, default='')
     stripe_pid = models.CharField(max_length=254, null=False, blank=False, default='')
 
+    # Required since if adding/removing items in admin the grand total will be updated accordingly
     def update_total(self):
         """
         Update grand total each time a line item is added,
@@ -79,8 +80,9 @@ class OrderLineItem(models.Model):
     product_size = models.CharField(max_length=2, null=True, blank=True) # XS, S, M, L, XL
     quantity = models.IntegerField(null=False, blank=False, default=0)
     lineitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False, editable=False)
-    
+
     # Everytime the save method is called on OrderlinbeItem this function will execute
+    # This calcaulation can also be done in the checkout view
     def save(self, *args, **kwargs):
         """
         Override the original save method to set the lineitem total

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 <!-- Extends our base.html -->
 {% block content %}
     <div class="container header-container">
@@ -13,3 +14,10 @@
         </div>
     </div>
 {% endblock %}
+
+{% block postloadjs %}    
+    {{ block.super }}    
+    <script type="text/javascript" src="{% static 'js/allauth.js' %}"></script>
+{% endblock %}
+
+
