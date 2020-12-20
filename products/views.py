@@ -4,6 +4,7 @@ from django.db.models import Q
 # Import models database to use in search
 from .models import Product, Category
 from django.db.models.functions import Lower
+from .forms import ProductForm
 
 
 # Create your views here.
@@ -88,3 +89,14 @@ def product_detail(request, product_id):
         'product': product,
     }
     return render(request, 'products/product_detail.html', context)
+
+
+def add_product(request):
+    """ Add a product to the store """
+    form = ProductForm()
+    template = 'products/add_product.html'
+    context = {
+        'form': form,
+    }
+
+    return render(request, template, context)
