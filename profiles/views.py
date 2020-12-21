@@ -16,10 +16,14 @@ def profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully')
-    # prepopulate form with profile information above if exists
-    form = UserProfileForm(instance=profile)
-    # Get all orders for that profile user using foreignkey/related name
-    # Foreignkey located within order, hence backwards relationship
+        else:
+            messages.error(request, 'Update failed. Please ensure the form is valid.')
+    # GET
+    else:
+        # prepopulate form with profile information above if exists
+        form = UserProfileForm(instance=profile)
+        # Get all orders for that profile user using foreignkey/related name
+        # Foreignkey located within order, hence backwards relationship
     orders = profile.orders.all()
 
     template = 'profiles/profile.html'

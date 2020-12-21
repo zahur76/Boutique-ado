@@ -52,6 +52,7 @@ def checkout(request):
         #     'county': request.POST['county'],
         # }
         # Make instance of form filled with form data
+        # https://docs.djangoproject.com/en/3.1/topics/forms/modelforms/#the-save-method
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
             # https://docs.djangoproject.com/en/3.1/topics/forms/modelforms/
@@ -59,7 +60,7 @@ def checkout(request):
             # This method creates and saves a database object from the data bound to the form, ie Order
             # small letter order represents the Order model
             # Commit=False prevents saving since still have addional fields to enter into model not present in form
-            # We are saving to the attached Object model
+            # We are saving to the attached Object model which is a new instance
             order = order_form.save(commit=False)
             # same as intent.id/included in form
             pid = request.POST.get('client_secret').split('_secret')[0]
