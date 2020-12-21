@@ -211,8 +211,8 @@ def checkout_success(request, order_number):
             }
             # https://docs.djangoproject.com/en/3.1/topics/forms/modelforms/#the-save-method
             # Here we are updating an exisitng model, hence we use instance.
-            # Instance is equal to the Model profile we want to update and profile_data the data
-            # Make instance of Userprofile form
+            # Instance is equal to the Model profile we want to update and profile_data
+            # Make instance of Userprofile form to update the profile instance called above
             user_profile_form = UserProfileForm(profile_data, instance=profile)
             # prefer to use form since we can validate
             if user_profile_form.is_valid():
