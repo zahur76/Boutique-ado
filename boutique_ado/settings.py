@@ -32,7 +32,7 @@ STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET')
 DATABASE = os.environ.get('DATABASE_URL')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEVELOPMENT' in os.environ
 
 # Required for deployment
 ALLOWED_HOSTS = ['zahur-boutique-ado.herokuapp.com', 'localhost']
