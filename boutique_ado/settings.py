@@ -34,6 +34,7 @@ DATABASE = os.environ.get('DATABASE_URL')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Required for deployment
 ALLOWED_HOSTS = ['zahur-boutique-ado.herokuapp.com', 'localhost']
 
 
