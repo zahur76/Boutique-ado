@@ -34,7 +34,7 @@ DATABASE = os.environ.get('DATABASE_URL')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['zahur-boutique-ado.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -129,16 +129,19 @@ WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-DATABASES = {
+if DATABASE:
+    DATABASES = {
     'default': dj_database_url.parse(DATABASE)
-}
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+
 
 ACCOUNT_FORMS = {'signup': 'templates.forms.CustomSignupForm'}
 # Password validation
