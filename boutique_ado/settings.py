@@ -32,14 +32,14 @@ STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET')
 DATABASE = os.environ.get('DATABASE_URL')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# means if 'DEVELOPMENT' in os.environ == True
 DEBUG = 'DEVELOPMENT' in os.environ
+print(DEBUG)
 
 # Required for deployment
 ALLOWED_HOSTS = ['zahur-boutique-ado.herokuapp.com', 'localhost']
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
 
     # Other
     'crispy_forms',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -187,6 +188,25 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 # This will add the file to the media folder and not to another url
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Will only be prsent in heroku , so in development will use local storage
+if 'USE_AWS' in os.environ:
+    # Bucket Config
+    AWS_STORAGE_BUCKET_NAME = 'zahur-boutique-ado'
+    AWS_S3_REGION_NAME = ' ap-southeast-1'
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+    # Static and media files
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    STATICFILES_LOCATION = 'static'
+    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+    MEDIAFILES_LOCATION = 'media'
+
+    # Override static and media URLs in production
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
 
 # Stripe
 FREE_DELIVERY_THRESHOLD = 50
