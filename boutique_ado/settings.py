@@ -133,8 +133,8 @@ WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 
 if DATABASE:
     DATABASES = {
-    'default': dj_database_url.parse(DATABASE)
-    }
+                'default': dj_database_url.parse(DATABASE)
+                }
 else:
     DATABASES = {
         'default': {
@@ -182,7 +182,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+# used for statuic folders within apps
 STATIC_URL = '/static/'
+# For static files not tied up to add, e.g base.css
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 # This will add the file to the media folder and not to another url
