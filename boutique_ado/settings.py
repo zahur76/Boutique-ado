@@ -80,6 +80,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            # Need to provide root directory where templates are situated
             os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'templates', 'allauth'),
         ],
@@ -143,8 +144,6 @@ else:
         }
     }
 
-
-
 ACCOUNT_FORMS = {'signup': 'templates.forms.CustomSignupForm'}
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -182,9 +181,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-# used for statuic folders within apps
+# used for static folders within apps
 STATIC_URL = '/static/'
-# For static files not tied up to add, e.g base.css
+# For static files not tied up to app, e.g base.css
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 # This will add the file to the media folder and not to another url

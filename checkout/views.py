@@ -101,6 +101,8 @@ def checkout(request):
                     return redirect(reverse('view_bag'))
             # saving save-info value/checked or not checked
             request.session['save_info'] = 'save-info' in request.POST
+            print(request.session['save_info'])
+            print(request.session['save_info'])
             # Order has been saved above and repesents the Order model
             return redirect(reverse('checkout_success', args=[order.order_number]))
         else:

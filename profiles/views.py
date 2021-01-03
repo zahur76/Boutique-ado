@@ -8,7 +8,6 @@ from .forms import UserProfileForm
 from checkout.models import Order
 
 
-
 @login_required
 def profile(request):
     """ Display the user's profile. """
@@ -34,7 +33,8 @@ def profile(request):
     context = {
         'form': form,
         'orders': orders,
-        'on_profile_page': True
+        'on_profile_page': True,
+        'profile': profile,
     }
 
     return render(request, template, context)

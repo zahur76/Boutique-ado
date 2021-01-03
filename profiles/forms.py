@@ -5,7 +5,7 @@ from .models import UserProfile
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        # We dont want this field to be modified. Remember its already created in sign-up
+        # We dont want this field to be modified. Remember its already created in sign-up and assigned to user
         exclude = ('user',)
 
     def __init__(self, *args, **kwargs):
