@@ -124,7 +124,7 @@ ACCOUNT_USERNAME_MIN_LENGTH = 4
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 
@@ -218,12 +218,14 @@ if 'USE_AWS' in os.environ:
 FREE_DELIVERY_THRESHOLD = 50
 STANDARD_DELIVERY_PERCENTAGE = 10
 STRIPE_CURRENCY = 'usd'
-DEFAULT_FROM_EMAIL = 'boutiqueado@example.com'
+# DEFAULT_FROM_EMAIL = 'boutiqueado@example.com'
 
 if 'DEVELOPMENT' in os.environ:
+    print('im in development')
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEFAULT_FROM_EMAIL = 'boutiqueado@example.com'
 else:
+    print('im not in development')
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_USE_TLS = True
     EMAIL_PORT = 587

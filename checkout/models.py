@@ -72,6 +72,7 @@ class Order(models.Model):
     def __str__(self):
         return self.order_number
 
+
 # https://docs.djangoproject.com/en/3.1/topics/db/queries/ lookups
 class OrderLineItem(models.Model):
     # orderlineitem can have only 1 order, so put foreignkey here
